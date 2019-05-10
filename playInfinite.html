@@ -101,6 +101,41 @@
             <li></li>
         </ul>
     </div>
+
+    <div class="infinitePlay">
+            <ul class='img-ct'>
+                <li><a href=""><img src="https://upload-images.jianshu.io/upload_images/179026-2692a99ab9f84b46.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></a></li>
+                <li><a href=""><img src="https://upload-images.jianshu.io/upload_images/179026-436788b3b8963827.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></a></li>
+                <li><a href=""><img src="https://upload-images.jianshu.io/upload_images/179026-9be25b8c619aa41e.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></a></li>
+                <li><a href=""><img src="https://upload-images.jianshu.io/upload_images/179026-52352086946d311b.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></a></li>
+            </ul>
+            <span class="pre"> < </span>
+            <span class="next"> > </span>
+            <ul class='choice'>
+                <li class='active'></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+        </div>
+
+        <div class="infinitePlay">
+                <ul class='img-ct'>
+                    <li><a href=""><img src="https://upload-images.jianshu.io/upload_images/179026-2692a99ab9f84b46.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></a></li>
+                    <li><a href=""><img src="https://upload-images.jianshu.io/upload_images/179026-436788b3b8963827.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></a></li>
+                    <li><a href=""><img src="https://upload-images.jianshu.io/upload_images/179026-9be25b8c619aa41e.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></a></li>
+                    <li><a href=""><img src="https://upload-images.jianshu.io/upload_images/179026-52352086946d311b.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></a></li>
+                </ul>
+                <span class="pre"> < </span>
+                <span class="next"> > </span>
+                <ul class='choice'>
+                    <li class='active'></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </div>
+
     <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
     <script>
         function infinitePlay($ct){
@@ -195,6 +230,8 @@
 
 
         new infinitePlay($('.infinitePlay').eq(0));
+        new infinitePlay($('.infinitePlay').eq(1));
+        new infinitePlay($('.infinitePlay').eq(2));
 
         //new infinitePlay($('.infinitePlay').eq(1));组件方法，具有普适性，代码便于管理
     </script>
