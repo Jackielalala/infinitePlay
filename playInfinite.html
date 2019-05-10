@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+        * {
+            padding:0;
+            margin:0;
+        }
+        body {
+            padding:5vw;
+        }
+        .infinitePlay {
+            position:relative;
+            width: 10vw;
+            height:8vw;
+            overflow:hidden;
+        }
+        ul,li{
+            list-style:none;
+        }
+        .img-ct li {
+            float:left;
+        }
+        .img-ct {
+            position:absolute;
+            white-space:nowrap;
+        }
+        .img-ct::after {
+            content:'';
+            display:block;
+            clear:both;
+        }
+        img {
+            width:10vw;
+            height:8vw;
+        }
+        span {
+            display:inline-block;
+            width:1vw;
+            height:1vw;
+            font-weight: bold;
+            border:.1vw solid rgb(194, 194, 202);
+            border-radius:.5vw;
+            line-height:1vw;
+            font-size:1vw;
+            text-align:center;
+            color:rgb(194, 194, 202);
+            cursor:pointer;
+        }
+        span:hover {
+            opacity:.6;
+        }
+        span.pre {
+            position:absolute;
+            top:50%;
+            left:.5vw;
+            transform:translate(0,-50%);
+        }
+        span.next {
+            position:absolute;
+            top:50%;
+            right:.5vw;
+            transform:translate(0,-50%);
+        }
+        .active {
+            background-color:white;
+        }
+        .choice {
+            width:100%;
+            position:absolute;
+            bottom:1vw;
+            text-align:center;
+        }
+        .choice li {
+            display:inline-block;
+            width:1vw;
+            height:.2vw;
+            border:1px solid rgb(194, 194, 202);
+            cursor:pointer;
+        }
+    </style>
+    <title>Document</title>
+</head>
+<body>
+    <div class="infinitePlay">
+        <ul class='img-ct'>
+            <li><a href=""><img src="https://upload-images.jianshu.io/upload_images/179026-2692a99ab9f84b46.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></a></li>
+            <li><a href=""><img src="https://upload-images.jianshu.io/upload_images/179026-436788b3b8963827.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></a></li>
+            <li><a href=""><img src="https://upload-images.jianshu.io/upload_images/179026-9be25b8c619aa41e.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></a></li>
+            <li><a href=""><img src="https://upload-images.jianshu.io/upload_images/179026-52352086946d311b.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></a></li>
+        </ul>
+        <span class="pre"> < </span>
+        <span class="next"> > </span>
+        <ul class='choice'>
+            <li class='active'></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+    <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
+    <script>
+        function infinitePlay($ct){
+            this.init($ct);
+            this.bind();
+            this.autoPlay();
+        }
+        infinitePlay.prototype = {
+            init:function($ct){
+                this.$ct = $ct;
+                this.$imgCt = this.$ct.find('.img-ct');
+                this.$imgs = this.$ct.find('.img-ct>li');
+                this.$preBtn = this.$ct.find('.pre');
+                this.$nextBtn = this.$ct.find('.next');
+                this.$choice = this.$ct.find('.choice li');
+
+                this.imgWidth = this.$imgs.width();
+                this.imgCount = this.$imgs.length;
+
+                this.$imgCt.append(this.$imgs.first().clone());
+                this.$imgCt.prepend(this.$imgs.last().clone());
+                this.$imgCt.css('width',(this.imgCount+2)*this.imgWidth);
+                console.log(this.imgCount);
+                console.log(this.$imgCt.width());
+
+                this.$imgCt.css('left', - this.imgWidth);
+                this.index = 0;
+
+                
+
+            },
+            bind:function(){
+                var _this = this;
+                this.$preBtn.on('click',function(){
+                    console.log('pre...');
+                    _this.playPre(1);
+                    _this.stopPlay();
+                })
+                this.$nextBtn.on('click',function(){
+                    console.log('next...');
+                    _this.playNext(1);
+                    _this.stopPlay();
+                })
+                this.$choice.on('click',function(){
+                    $(this).addClass('active').siblings().removeClass('active');
+                    var index = $(this).index();
+                    if(_this.index>index){
+                        _this.playPre(_this.index-index);
+                    }else if(_this.index<index){
+                        _this.playNext(index-_this.index);
+                    };
+                    _this.stopPlay();
+                })
+            },
+            playNext:function(len){
+                var _this = this;
+                this.$imgCt.animate({
+                    left:'-='+_this.imgWidth*len
+                },function(){
+                    _this.index += len;
+                    if(_this.index === _this.imgCount){
+                        _this.$imgCt.css('left',-_this.imgWidth);
+                        _this.index = 0;
+                    };
+                    _this.$choice.eq(_this.index).addClass('active').siblings().removeClass('active');
+                })
+                
+            },
+            playPre:function(len){
+                var _this = this;
+                this.$imgCt.animate({
+                    left:'+='+_this.imgWidth*len
+                },function(){
+                    _this.index -= len;
+                    if(_this.index === -1){
+                        _this.$imgCt.css('left',-_this.imgWidth*_this.imgCount);
+                        _this.index = -1 + _this.imgCount;
+                    };
+                    _this.$choice.eq(_this.index).addClass('active').siblings().removeClass('active');    
+                })
+            },
+            autoPlay:function(){
+                var _this = this;
+                this.timer = setInterval(function(){
+                    _this.playPre(1);
+                },1000)
+            },
+            stopPlay:function(){
+                clearInterval(this.timer);
+            }
+        }
+
+
+        new infinitePlay($('.infinitePlay').eq(0));
+
+        //new infinitePlay($('.infinitePlay').eq(1));组件方法，具有普适性，代码便于管理
+    </script>
+</body>
+</html>
